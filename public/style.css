@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nosifer&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+/* font-family: "Nosifer", sans-serif; */
+/* font-family: "Poppins", sans-serif; */
+/* font-family: "Kanit", sans-serif; */
+
+:root{
+    --primary-color : #ffff ;
+    --text-secondary : #256cab ;
+    --bg-primary-color : #0e144b ;
+    --bg-secondary-color : #e9f2fb ;
+    --hover-color : #ebefc7 ;
+    --grey-color :#808080 ;
+    --dark : #000000 ;
+}
+
+
+body{
+    margin: 0px;
+    padding: 0px;
+    height: 100vh !important;
+}
+
+.font{
+    font-weight: 500 !important;
+}
+
+
+.second-color{
+    color: var(--text-secondary) !important;
+}
+
+
+::-webkit-scrollbar{
+    display: none;
+}
+.bg-color{
+    background:var(--bg-secondary-color) !important;
+}
+
+.color{
+    background-color: var(--bg-primary-color) !important ;
+}
+
+main{
+    min-height: 81vh;
+    color: var(--bg-primary-color) !important;
+}
+tr td a , .primary-color {
+    color: var(--bg-primary-color) !important;
+}
+
+textarea{
+    resize: none !important;
+}
+textarea:focus ,input,select {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+header{
+    color: var(--primary-color);
+}
+
+ul li a, .header-btn a  {
+    color: var(--primary-color);
+}
+
+ul li a:hover, .header-btn a:hover {
+    color: var(--hover-color);
+}
+
+.login-view{
+    width: 320px;
+}
+
+.manager-nav{
+    color: var(--dark);
+}
+.butn{
+    color: var(--primary-color) !important;
+    background-color: var(--bg-primary-color) !important;
+}
+
+.dashbord-cards{
+    min-height: 15vh;
+}
+
+.crt-btn{
+    font-size: 12px !important;
+    border: 1px solid !important;
+}
+.crt-btn:hover{
+    background-color: var(--text-secondary) !important;
+    color: var(--primary-color) !important;
+}
+
+.add-task-btn:hover{
+    color: var(--primary-color) !important;
+}
+
+.selectStatus {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    border: none !important;
+}

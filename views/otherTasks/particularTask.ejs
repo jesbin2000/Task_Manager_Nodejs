@@ -1,0 +1,30 @@
+
+
+<%- include('../header.ejs') %>
+
+<main class="d-flex align-items-center bg-color">
+
+    <div class="container shadow p-4 bg-light ">
+        <h5>Task :</h5>
+        
+        <h5 class="bg-color p-2 rounded"><%= task.task  %></h5>
+
+        <h5> Description :</h4>
+        <p class="bg-color p-2 rounded font "><%= task.description  %></p>
+        
+        <h5>Assigned to :</h4>
+        <p class="bg-color p-2 rounded font"><%= task.assigned  %></p>
+        
+        <h5>Due Date :</h4>
+        <p class="bg-color p-2 rounded font"><%= task.formattedDueDate  %></p>
+        
+        <h5>No. of days remaining :</h4>
+        <p class="bg-color p-2 rounded font text-danger fw-bold"><%= task.remainingDays  %> Days only</p>
+
+    </div>
+
+</main>
+
+
+
+<%- include('../footer.ejs') %>

@@ -1,0 +1,101 @@
+<%- include('../header.ejs') %>
+
+<main class="container-fluid p-0">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="fw-bold">My Tasks</h3>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-5 bg-color rounded shadow-sm p-3 mb-4">
+                <h4 class="fw-bold mb-3 second-color">Incomplete Tasks</h4>
+                <ul class="list-group list-group-flush ps-4">
+                    <% assignedTask.forEach(task => { %>
+                        <% if (task.status !== 'Completed') { %>
+                            <li class="font"><%= task.task %></li>
+                        <% } else { %>
+                            <h6 class="text-success text-center fw-bold">You’ve finished your work!</h6>
+                        <% } %>
+                    <% }) %>
+                </ul>
+            </div>
+
+            <div class="col-5 bg-color rounded shadow-sm p-3 mb-4 offset-md-1">
+                <h4 class="fw-bold mb-3 second-color">Completed Tasks</h4>
+                <ul class="list-group list-group-flush ps-4">
+                    <% assignedTask.forEach(task => { %>
+                        <% if (task.status === 'Completed') { %>
+                            <li class="font"><%= task.task %></li>
+                        <% } else { %>
+                            <h5 class="text-danger text-center fw-bold">No tasks completed yet *</h5>
+                        <% } %>
+                    <% }) %>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <table class="table mt-5">
+                <thead>
+                    <tr class="color text-light">
+                        <th scope="col" class="col-1">Sl no.</th>
+                        <th scope="col" class="col-4">TASK</th>
+                        <th scope="col" class="col-2">DUE DATE</th>
+                        <th scope="col" class="col-2">REMAINING DAYS</th>
+                        <th scope="col" class="col-3">CURRENT STATUS</th>
+                        <th scope="col" class="col-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% assignedTask.forEach((task, index) => { %>
+                        <tr class="align-items-center">
+                            <td scope="row" class="fw-bold"><%= index + 1 %></td>
+                            <td class="font"><%= task.task %></td>
+                            <td class="font ps-2"><%= task.date%></td>
+                            <td class="font"><%= task.remainingDays  %></td>
+                            <td class="font">
+                                <input type="hidden" name="taskId" value="<%= task._id %>">
+                                <form action="/update-task-status" method="POST" class="d-flex">
+                                    <input type="hidden" name="taskId" value="<%= task._id %>">
+                                    <select name="status" class="form-select w-75 selectStatus" name="status">
+                                        <option value="Pending" <%= task.status === 'Pending' ? 'selected' : '' %>  class="text-danger">PENDING</option>
+                                        <option value="On Progress" <%= task.status === 'On Progress' ? 'selected' : '' %> class="text-primary">ON PROGRESS</option>
+                                        <option value="Completed" <%= task.status === 'Completed' ? 'selected' : '' %> class="text-success">COMPLETED</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-danger mt-2 ms-5" value="<%= task._id %>">Save</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+<!--Logout Modal -->
+<div class="modal fade" id="LogoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-danger" id="exampleModalLabel">LOG OUT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                Are you sure you want to log out?
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-secondary fw-bold" data-bs-dismiss="modal">Cancel</button>
+                <a href="/logout" class="btn btn-danger fw-bold">Log out</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</main>
+
+<%- include('../footer.ejs') %>

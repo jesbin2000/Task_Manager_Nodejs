@@ -1,0 +1,41 @@
+<%- include('../header.ejs') %>
+
+<main class="container-fluid p-0 d-flex align-items-center justify-content-center bg-color">
+    <div class="d-flex">
+        <div class="login-view shadow p-4 d-flex flex-column gap-1 bg-light">
+            <h3 class="text-center fw-bold">SIGN IN</h3>
+
+            <% if (message) { %>
+                <div class="errors text-danger text-center"><%= message %></div>
+            <% } %>
+
+            <div class="errors text-danger text-center"></div>
+            <% if (locals.roleTo === "Manager") { %>
+                <form  action="/userDashboard" class="d-flex flex-column gap-3" method="POST">
+            <% } else { %>                    
+                <form action="/managerDashboard" class="d-flex flex-column gap-3" method="POST">
+            <% } %>
+                <div class="d-flex flex-column">
+                    <% if (locals.roleTo !== "Manager" ) { %>
+                            <label for="username" class="fw-bold mb-2 d-flex justify-content-between" >User name <a href="/ " class="text-decoration-none manager-nav"><i class="fa-solid fa-user me-1"></i><%= locals.roleTo %><i class="fa-solid fa-arrow-right ms-1"></i> </a></label>
+                    <% } else { %>
+                            <label for="username" class="fw-bold mb-2 d-flex justify-content-between" >User name <a href="/manager" class="text-decoration-none manager-nav"><i class="fa-solid fa-user-secret me-1"></i><%= locals.roleTo %> <i class="fa-solid fa-arrow-right ms-1"></i> </a></label>
+                    <% } %>
+                    <input type="text" id="username" name="username" class="rounded">
+                </div>
+
+                <div class="d-flex flex-column">
+                    <label for="password" class="fw-bold mb-2">Password</label>
+                    <input type="password" id="password" name="password" class="rounded">
+                </div>
+                <button type="submit" class="butn rounded py-2 my-3 fw-bolder">Sign in</button>
+            </form>
+
+            <% if (locals.roleTo === "Manager") { %>
+                <p class="mb-3 mt-2">Not registered yet?<a href="/signUp" class="text-decoration-none fw-bolder">SignUp</i></a></p>
+            <% } %>
+        </div>
+    </div>
+</main>
+
+<%- include('../footer.ejs') %>

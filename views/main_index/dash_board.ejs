@@ -1,0 +1,174 @@
+<%- include('../header.ejs') %>
+
+<main class="container-fluid p-0">
+    <div class="container p-0">
+        <h3 class="fw-bolder py-4">Task Dashboard</h3>
+
+        <div class="row gap-5 dashbord-cards px-3">
+
+            <div class="col py-2 shadow bg-color">
+                <div class="d-flex justify-content-between task add">
+                    <% 
+                    let totalIncompletedTasks = allTask.filter(task => task.status !== "completed");
+                    let incompletedTasks = tasks.filter(task => task.status !== "completed");
+                    %>
+                    <h5 class="fw-bold second-color">Current Tasks : <%= totalIncompletedTasks.length %></h5>
+                    <a href="addTask" class="btn p-1 crt-btn d-flex align-items-center second-color add-task-btn">
+                        <i class="fa-solid fa-plus"></i> Add task
+                    </a>
+                </div>
+                
+                <% if (incompletedTasks.length > 0) { %>
+                    <ul>
+                        <% incompletedTasks.forEach(task => { %>
+                            <li class="font"><%= task.task %></li>
+                        <% }) %>
+                    </ul>
+                <% } else { %>
+                    <p class="text-success fw-bold text-center mt-3">No tasks are pending yet</p>
+                <% } %>
+            </div>
+
+            <div class="col py-2 shadow bg-color"> 
+                <% 
+                let totalCompletedTasks = allTask.filter(task => task.status === "completed");
+                let completedTasks = tasks.filter(task => task.status === "completed");
+                %>
+                <% if (tasks && tasks.length > 0) { %>
+                    <h5 class="fw-bold second-color">Tasks Completed : <%= totalCompletedTasks.length %></h5>
+                    <% if (completedTasks.length > 0) { %>
+                        <ul>
+                            <% completedTasks.forEach(task => { %>
+                                <li class="font"><%= task.task %></li>
+                            <% }) %>
+                        </ul>
+                    <% } else if(totalCompletedTasks.length === 0) { %>
+                        <p class="text-danger fw-bold text-center mt-3">No tasks are completed yet</p>
+                    <% } else { %>
+                        <p class="text-success fw-bold text-center mt-3">Tasks are progressing</p>
+                    <% } %>
+                <% } else { %>
+                    <h5 class="fw-bold second-color">Tasks Completed : <%= totalCompletedTasks.length %></h5>
+                <% } %>
+            </div>
+
+            <div class="col py-2 shadow bg-color">
+                <h5 class="fw-bold second-color">Users Available</h5>
+                <ul>
+                    <% if (unassignedUsers && unassignedUsers.length > 0) { %>
+                        <% unassignedUsers.forEach(user => { %>
+                            <% if (user.role != "manager") { %>
+                                <li class="font"><%= user.userName %></li>  
+                            <% } %>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-danger fw-bold text-center mt-3">Currently all are working</p>
+                    <% } %>
+                </ul>
+                
+            </div>
+
+        </div>
+        
+        <div class="mt-5 shadow p-4">
+            <form action="/search" class="input-group mb-3 w-100 d-flex justify-content-end" method="POST">
+                <input type="text" placeholder="Search" name="searchTask" class="ps-2 bg-color rounded-start fw-medium">
+                <button class="border-0 text-light fw-bold bg-secondary rounded-end" type="submit">
+                    <i class="fa-brands fa-searchengin"></i> Search
+                </button>
+            </form>
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Slno.</th>
+                        <th scope="col">Task : <span class="text-danger border px-2 py-1 bg-color"><%= allTask.length %></span></th>
+                        <th scope="col">Assigned to</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (message) { %>
+                        <tr>
+                            <td colspan="6" class="text-center text-danger">
+                                <h4><%= message %></h4>
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <% let startSlno = (currentPage - 1) * limit + 1; %>
+                        <% tasks.forEach((task, index) => { %>
+                            <tr>
+                                <th scope="row"><%= startSlno + index %></th>
+                                <td class="col-6"><a href="/viewTask/<%= task._id %>" class="text-decoration-none fw-bold"><%= task.task %></a></td>
+                                <td><a href="#" class="text-decoration-none font"><%= task.assigned %></a></td>
+                                <td class="font"><%= task.status %></td>
+                                <td class="p-0 align-items-center flex-column text-center">
+                                    <a href="/edit/<%= task._id %>" class="text-secondary"><i class="fa-solid fa-pen-to-square p-2"></i></a>
+                                </td>
+                                <td class="p-0 align-items-center flex-column text-center">
+                                    <a onclick="deleteTask('<%= task._id %>')" class="text-secondary"><i class="fa-solid fa-trash p-2"></i></a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <ul class="pagination justify-content-end mt-3">
+                <li class="page-item">
+                    <a class="page-link primary-color font" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">
+                        <i class="fa-solid fa-angles-left"></i>
+                    </a>
+                </li>
+            
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <li class="page-item font <%= currentPage === i ? 'active' : '' %>">
+                    <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
+                </li>
+            <% } %>
+
+                <li class="page-item">
+                    <a class="page-link primary-color font" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a>
+                </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<!--Logout Modal -->
+<div class="modal fade" id="LogoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-light">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-danger" id="exampleModalLabel">LOG OUT</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                Are you sure you want to log out?
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-secondary fw-bold" data-bs-dismiss="modal">Cancel</button>
+                <a href="/logout" class="btn btn-danger fw-bold">Log out</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</main>
+
+<%- include('../footer.ejs') %>
