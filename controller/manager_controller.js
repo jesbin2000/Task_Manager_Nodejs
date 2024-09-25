@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie-parser');
+const rolecheck = require('../middleware/authMiddleware')
 
 
 
@@ -260,6 +261,24 @@ const editTask = async (req, res) =>{
     }
 }
 
+const backToHome = async (req, res) =>{
+    try{
+        const user = await data_task.findUser(req.user._id);
+        if (user.role === "manager") {
+            res.redirect('/dashboard')
+        } else {
+            res.redirect('/userDashboard')
+        }
+        
+    }
+    catch(error){
+        console.log(error);
+    }
+
+} 
+
+
+
 const logout = (req, res) =>{
 
         res.clearCookie('token')
@@ -270,5 +289,5 @@ const logout = (req, res) =>{
 
 module.exports = { loginView, signin, dashboard, addTaskView,
                     createTask,searchTask, about, ParticularTaskView,
-                    deleteTask,editTaskView, editTask,logout
+                    deleteTask,editTaskView, editTask,logout,backToHome
                 }

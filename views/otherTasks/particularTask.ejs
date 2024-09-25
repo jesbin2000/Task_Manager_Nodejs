@@ -3,8 +3,13 @@
 <%- include('../header.ejs') %>
 
 <main class="d-flex align-items-center bg-color">
-
-    <div class="container shadow p-4 bg-light ">
+    
+    
+    <div class="container shadow p-0 bg-light">
+        <div class="mb-3  taskView  color text-light py-1">
+            <a href="/Home" class="ms-2 text-decoration-none text-light"><i class="fa-solid fa-arrow-left me-1"></i>Back</a>
+        </div>
+    <div class="px-3">
         <h5>Task :</h5>
         
         <h5 class="bg-color p-2 rounded"><%= task.task  %></h5>
@@ -20,6 +25,7 @@
         
         <h5>No. of days remaining :</h4>
         <p class="bg-color p-2 rounded font text-danger fw-bold"><%= task.remainingDays  %> Days only</p>
+    </div>
 
     </div>
 

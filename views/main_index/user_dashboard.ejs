@@ -35,7 +35,7 @@
         </div>
 
         <div>
-            <table class="table mt-5">
+            <table class="table mt-5 table-hover">
                 <thead>
                     <tr class="color text-light">
                         <th scope="col" class="col-1">Sl no.</th>
@@ -50,7 +50,7 @@
                     <% assignedTask.forEach((task, index) => { %>
                         <tr class="align-items-center">
                             <td scope="row" class="fw-bold"><%= index + 1 %></td>
-                            <td class="font"><%= task.task %></td>
+                            <td class="font"><a href="/viewTask/<%= task._id %>" class="text-decoration-none fw-bold "><%= task.task %></a></td>
                             <td class="font ps-2"><%= task.date%></td>
                             <td class="font"><%= task.remainingDays  %></td>
                             <td class="font">
@@ -73,24 +73,8 @@
     </div>
 
 
-<!--Logout Modal -->
-<div class="modal fade" id="LogoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-light">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold text-danger" id="exampleModalLabel">LOG OUT</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                Are you sure you want to log out?
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-secondary fw-bold" data-bs-dismiss="modal">Cancel</button>
-                <a href="/logout" class="btn btn-danger fw-bold">Log out</a>
-            </div>
-        </div>
-    </div>
-</div>
+
+    <%- include('../otherTasks/logoutModal.ejs') %>
 
 
 

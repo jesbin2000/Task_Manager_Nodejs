@@ -108,3 +108,7 @@ ul li a:hover, .header-btn a:hover {
     font-weight: 500 !important;
     border: none !important;
 }
+
+.taskView h3{
+    font-weight: 700 !important;
+}
