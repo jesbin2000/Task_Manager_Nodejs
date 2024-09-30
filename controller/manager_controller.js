@@ -67,7 +67,7 @@ const addTaskView = async (req, res) =>{
     try {
 
         const teamMembers = await data_task.findTeamMembers();
-        res.render('main_Index/add_task', {teamMembers, message :null, edit:false ,task:{} })
+        res.render('main_index/add_task', {teamMembers, message :null, edit:false ,task:{} })
         
     } catch (error) {
         console.log(error);
@@ -95,7 +95,7 @@ const dashboard = async (req, res) =>{
 
         let allTask = await data_task.allTasks();
         
-        res.render('main_Index/dash_board', {  tasks, message : null, currentPage , totalPages, limit,allTask, unassignedUsers,locals} );
+        res.render('main_index/dash_board', {  tasks, message : null, currentPage , totalPages, limit,allTask, unassignedUsers,locals} );
 
     
 }
@@ -112,7 +112,7 @@ const createTask = async (req, res) => {
 
         if (!task || !assigned || !date || !description) {
             const teamMembers = await data_task.findTeamMembers();
-            return res.render('main_Index/add_task', { teamMembers, message: 'Enter all informations', edit, task:{}});
+            return res.render('main_index/add_task', { teamMembers, message: 'Enter all informations', edit, task:{}});
         } 
     
         const newTask = new Task({
@@ -164,11 +164,11 @@ const searchTask = async (req , res) => {
             const tasks = await data_task.searchData(searchTask);
     
             if (tasks.length == 0) {
-                res.render('main_Index/dash_board', {message: ` " ${searchTask} " Not Found `,  tasks, currentPage, totalPages, limit, allTask, unassignedUsers } )
+                res.render('main_index/dash_board', {message: ` " ${searchTask} " Not Found `,  tasks, currentPage, totalPages, limit, allTask, unassignedUsers } )
                 
             } else {
                 
-                res.render('main_Index/dash_board', {  tasks, message:null, currentPage, totalPages, limit, allTask, unassignedUsers} )
+                res.render('main_index/dash_board', {  tasks, message:null, currentPage, totalPages, limit, allTask, unassignedUsers} )
             }
             
         }
@@ -223,7 +223,7 @@ const about = ( req, res ) =>{
     const locals = {
         logoutBtn : true
         }
-    res.render('main_Index/about', locals);
+    res.render('main_index/about', locals);
 }
 
 
@@ -241,7 +241,7 @@ const editTaskView = async ( req, res ) =>{
         task.formattedDate = await helpers.dateformating(task.dueDate)
         
         const teamMembers = await data_task.findTeamMembers();
-        res.render('main_Index/add_task', {task, edit, message:null, teamMembers})
+        res.render('main_index/add_task', {task, edit, message:null, teamMembers})
 
     }catch(error){
         res.status(404).json("TASK not found");
