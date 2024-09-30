@@ -3,7 +3,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie-parser');
 const data_task = require('../services/data_task');
-const helpers = require('../Helpers/dateHelpers');
+// const helpers = require('../Helpers/dateHelpers');
 const Task = require('../model/Tasks')
 
 
@@ -46,28 +46,33 @@ const loginView = (req, res ) =>{
 
 const signin = async (req, res) => {
     try {
+        const locals = {
+            logoutBtn : false,
+            roleTo : "Manager"
+        }
+
         const {username, password} = req.body;
         
         if (!password || !username) {
-            return res.status(400).render('main_index/signin', { message: 'Enter the Password & username' });
+            return res.status(400).render('main_index/signin', { message: 'Enter the Password & username' , locals});
         }        
         
         let validUser = await data_task.validUser(username, password);  
         if (!validUser) {
-            return res.status(404).render('main_index/signin', { message: 'Invalid Username' });
+            return res.status(404).render('main_index/signin', { message: 'Invalid Username' , locals});
         }
 
         const passwordValid = await bcrypt.compare(password, validUser.password);
         
         if (!passwordValid) {
-            return res.status(401).render('main_index/signin', { message: 'Password incorrect' });
+            return res.status(401).render('main_index/signin', { message: 'Password incorrect', locals });
         }
 
         if (validUser.role === "teamMember") {
             const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
             res.cookie('token', token, { httpOnly: true, maxAge: 60 * 60 * 1000 }).redirect('/userDashboard');
         } else {
-            return res.status(404).render('main_index/signin', { message: 'Invalid Username' });
+            return res.status(404).render('main_index/signin', { message: 'Invalid Username', locals });
         }
     } catch (error) {
         console.log(error);
@@ -76,19 +81,19 @@ const signin = async (req, res) => {
 }
 
 
-
-
 const dashBoard = async(req, res) =>{
 
-    
+    try {
+        
     locals ={
-        logoutBtn : true,
+        roleTo: "User",
+        logoutBtn : true
     }
 
     const cookies = req.headers.cookie; 
 
     if (!cookies) {
-        return res.status(401).render('main_index/signin', { message: 'No cookies found. Please log in.' });
+        return res.status(401).render('main_index/signin', { message: 'No cookies found. Please log in.' , locals });
     }
 
     const token = cookies.split(';').find(cookie => cookie.startsWith('token='))?.split('=')[1];
@@ -98,6 +103,11 @@ const dashBoard = async(req, res) =>{
     const assignedTask = await data_task.assignedTask(decoded.id);
 
     res.render('main_index/user_dashboard', {locals, assignedTask});
+    
+} catch (error) {
+        console.log(error);
+        
+}
 } 
 
 const statusUpdate = async(req, res) =>{

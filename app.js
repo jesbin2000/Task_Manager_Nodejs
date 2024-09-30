@@ -1,10 +1,9 @@
 const express = require('express');
 const connectDB = require('./controller/config/db');
 const app = express();
+const path = require('path');
 const mangerRoutes = require('./routes/manager_routes');
 const userRoutes = require('./routes/user_routes');
-
-const path = require('path');
 require('dotenv').config();
 
 // connect database connect

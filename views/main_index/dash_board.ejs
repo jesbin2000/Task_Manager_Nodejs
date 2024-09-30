@@ -9,8 +9,8 @@
             <div class="col py-2 shadow bg-color">
                 <div class="d-flex justify-content-between task add">
                     <% 
-                    let totalIncompletedTasks = allTask.filter(task => task.status !== "completed");
-                    let incompletedTasks = tasks.filter(task => task.status !== "completed");
+                    let totalIncompletedTasks = allTask.filter(task => task.status !== "Completed"); 
+                    let incompletedTasks = tasks.filter(task => task.status !== "Completed");
                     %>
                     <h5 class="fw-bold second-color">Current Tasks : <%= totalIncompletedTasks.length %></h5>
                     <a href="addTask" class="btn p-1 crt-btn d-flex align-items-center second-color add-task-btn">
@@ -28,29 +28,31 @@
                     <p class="text-success fw-bold text-center mt-3">No tasks are pending yet</p>
                 <% } %>
             </div>
+            
+            
 
             <div class="col py-2 shadow bg-color"> 
                 <% 
-                let totalCompletedTasks = allTask.filter(task => task.status === "completed");
-                let completedTasks = tasks.filter(task => task.status === "completed");
+                let totalCompletedTasks = allTask.filter(task => task.status === "Completed"); 
+                    let completedTasks = tasks.filter(task => task.status === "Completed");
                 %>
-                <% if (tasks && tasks.length > 0) { %>
-                    <h5 class="fw-bold second-color">Tasks Completed : <%= totalCompletedTasks.length %></h5>
+                <h5 class="fw-bold second-color">Tasks Completed : <%= totalCompletedTasks.length %></h5>
+                
+                <% if (totalCompletedTasks.length > 0) { %>
                     <% if (completedTasks.length > 0) { %>
                         <ul>
                             <% completedTasks.forEach(task => { %>
                                 <li class="font"><%= task.task %></li>
                             <% }) %>
                         </ul>
-                    <% } else if(totalCompletedTasks.length === 0) { %>
-                        <p class="text-danger fw-bold text-center mt-3">No tasks are completed yet</p>
                     <% } else { %>
-                        <p class="text-success fw-bold text-center mt-3">Tasks are progressing</p>
+                        <p class="text-success fw-bold text-center mt-3">Tasks are progressing *</p>
                     <% } %>
                 <% } else { %>
-                    <h5 class="fw-bold second-color">Tasks Completed : <%= totalCompletedTasks.length %></h5>
+                    <p class="text-danger fw-bold text-center mt-3">No tasks are completed yet</p>
                 <% } %>
             </div>
+            
 
             <div class="col py-2 shadow bg-color">
                 <h5 class="fw-bold second-color">Users Available</h5>
@@ -107,8 +109,30 @@
                                     <a href="/edit/<%= task._id %>" class="text-secondary"><i class="fa-solid fa-pen-to-square p-2"></i></a>
                                 </td>
                                 <td class="p-0 align-items-center flex-column text-center">
-                                    <a onclick="deleteTask('<%= task._id %>')" class="text-secondary"><i class="fa-solid fa-trash p-2"></i></a>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#deleteModal<%= task._id %>" class="text-secondary">
+                                        <i class="fa-solid fa-trash p-2"></i>
+                                    </a>
+                                    
+                                    <!-- DELETE MODAL -->
+                                    <div class="modal fade" id="deleteModal<%= task._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= task._id %>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-danger fw-bold" id="deleteModalLabel<%= task._id %>">Delete Task</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this task?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <a onclick="deleteTask('<%= task._id %>')" class="btn btn-danger">Delete Task</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
+                                
                             </tr>
                         <% }) %>
                     <% } %>
@@ -117,28 +141,30 @@
         </div>
 
         <ul class="pagination justify-content-end mt-3">
-                <li class="page-item">
-                    <a class="page-link primary-color font" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">
-                        <i class="fa-solid fa-angles-left"></i>
-                    </a>
-                </li>
+            <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                <a class="page-link primary-color font" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>">
+                    <i class="fa-solid fa-angles-left"></i>
+                </a>
+            </li>
             
             <% for (let i = 1; i <= totalPages; i++) { %>
                 <li class="page-item font <%= currentPage === i ? 'active' : '' %>">
                     <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>"><%= i %></a>
                 </li>
             <% } %>
-
-                <li class="page-item">
-                    <a class="page-link primary-color font" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </li>
+            
+            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                <a class="page-link primary-color font" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>">
+                    <i class="fa-solid fa-angles-right"></i>
+                </a>
+            </li>
         </ul>
     </div>
 
 
 <%- include('../otherTasks/logoutModal.ejs') %>
+
+
 
 </main>
 

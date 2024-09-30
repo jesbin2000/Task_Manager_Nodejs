@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie-parser');
-const rolecheck = require('../middleware/authMiddleware')
+// const rolecheck = require('../middleware/authMiddleware')
 
 
 
@@ -27,28 +27,31 @@ const loginView = (req, res) => {
 
 const signin = async (req, res) => {
     try {
+        locals ={
+            roleTo: "User",
+        }
         const {username, password} = req.body;
         
         if (!password || !username) {
-            return res.status(400).render('main_index/signin', { message: 'Enter the Password & username' });
+            return res.status(400).render('main_index/signin', { message: 'Enter the Password & username' ,locals});
         }        
         
         let validUser = await data_task.validUser(username, password);  
         if (!validUser) {
-            return res.status(404).render('main_index/signin', { message: 'Invalid Username' });
+            return res.status(404).render('main_index/signin', { message: 'Invalid Username' ,locals});
         }
 
         const passwordValid = await bcrypt.compare(password, validUser.password);
         
         if (!passwordValid) {
-            return res.status(401).render('main_index/signin', { message: 'Password incorrect' });
+            return res.status(401).render('main_index/signin', { message: 'Password incorrect' ,locals });
         }
 
         if (validUser.role === "manager") {
             const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
             res.cookie('token', token, { httpOnly: true, maxAge: 60 * 60 * 1000 }).redirect('/dashboard');
         } else {
-            return res.status(404).render('main_index/signin', { message: 'Invalid Username' });
+            return res.status(404).render('main_index/signin', { message: 'Invalid Username' , locals});
         }
     } catch (error) {
         console.log(error);
@@ -232,6 +235,9 @@ const editTaskView = async ( req, res ) =>{
         const edit = true;
         id = req.params.id;
         const task = await data_task.findTask(id);
+        
+        
+        console.log(task);
 
         task.formattedDate = await helpers.dateformating(task.dueDate)
         

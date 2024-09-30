@@ -1,6 +1,7 @@
 const User = require('../model/User');
 const Task = require('../model/Tasks');
 const helpers = require('../Helpers/dateHelpers')
+const bcrypt = require('bcrypt');
 
 //------------------ Sign Up ------------------
 
@@ -16,8 +17,7 @@ const signUpTask = async ( username, password) =>{
 
         const newUser = new User({ userName: username, password: hashPassword });
         await newUser.save();
-        return
-}
+ }
 
 //---------------------Sign In -------------------
 
@@ -93,7 +93,7 @@ const searchData = async (searchTask) => {
         }).populate({
             path: 'assigned',
             select: 'userName -_id'
-        });;
+        });
         
         const transformedTasks = tasks.map(task => {
             return {
@@ -198,30 +198,31 @@ const findTask = async(id) =>{
 
 async function findUnassignedUsers() {
     try {
-        const unassignedUsers = await User.aggregate([
+
+        const unassignedOrWorkFreeUsers = await User.aggregate([
             {
-            $lookup: {
-                from: "tasks",
-                localField: "_id",
-                foreignField: "assigned",
-                as: "tasks"
-            }
+                $lookup: {
+                    from: "tasks",
+                    localField: "_id",
+                    foreignField: "assigned",
+                    as: "tasks"
+                }
             },
             {
-            $match: {
-                tasks: { $eq: [] }
-            }
+                $match: {
+                    $or: [
+                    { tasks: { $size: 0 } },  // Users with no tasks
+                    {
+                        tasks: {
+                        $not: { $elemMatch: { status: { $in: ["Pending", "Progress"] } } }  // Users whose tasks do not include any with status "Pending" or "Progress"
+                        }   
+                    }
+                    ]
+                }
             }
         ]);
-
         
-        const users = unassignedUsers.filter(user => user.role !== "manager");
-        // console.log(users);
-        
-        
-        return users;
-
-
+        return unassignedOrWorkFreeUsers;
         
         }   
         catch (err) {
