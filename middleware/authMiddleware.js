@@ -21,7 +21,6 @@ const authenticateToken = async (req, res, next) => {
 
         req.user = user;   
         console.log('user data' , req.user);
-             
         next();
     } catch (error) {
         console.error('Token verification failed:', error);
