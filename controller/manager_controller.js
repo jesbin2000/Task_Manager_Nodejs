@@ -1,11 +1,10 @@
 const Task = require('../model/Tasks')
-const data_task = require('../services/data_task');
+const data_task = require('../services/data_services');
 const helpers = require('../Helpers/dateHelpers');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie-parser');
-// const rolecheck = require('../middleware/authMiddleware')
 
 
 
@@ -77,7 +76,7 @@ const addTaskView = async (req, res) =>{
 
 }
 
-//------------- view dashboard -----------------
+//------------- view dashboard ----------
 
 const dashboard = async (req, res) =>{
     const locals = {

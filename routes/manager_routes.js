@@ -31,8 +31,6 @@ router.delete('/delete/:id' , middleware.authenticateToken , middleware.requireM
 
 router.post('/managerDashboard',  managerController.signin)
 
-// router.post('/signUp', managerController.signUp);
-
 router.post('/addTask', middleware.authenticateToken , middleware.requireManagerRole, managerController.createTask);
 
 router.post('/search',middleware.authenticateToken , middleware.requireManagerRole, managerController.searchTask);

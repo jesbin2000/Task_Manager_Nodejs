@@ -22,7 +22,7 @@ app.use('/', userRoutes);
 app.set('view engine', 'ejs' );
 
 
-// PORT RUNNING\
+// PORT 
 const PORT = process.env.PORT || 5000 ;
 app.listen(PORT,()=>{
     console.log(`Server running on port : ${PORT}`);

@@ -211,10 +211,10 @@ async function findUnassignedUsers() {
             {
                 $match: {
                     $or: [
-                    { tasks: { $size: 0 } },  // Users with no tasks
+                    { tasks: { $size: 0 } },  
                     {
                         tasks: {
-                        $not: { $elemMatch: { status: { $in: ["Pending", "Progress"] } } }  // Users whose tasks do not include any with status "Pending" or "Progress"
+                        $not: { $elemMatch: { status: { $in: ["Pending", "Progress"] } } } 
                         }   
                     }
                     ]

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const data_task = require('../services/data_task');
+const data_task = require('../services/data_services');
 
 // Basic authentication middleware
 const authenticateToken = async (req, res, next) => {
@@ -29,8 +29,7 @@ const authenticateToken = async (req, res, next) => {
         return res.status(403).redirect('/');
     }
 };
-
-// Middleware for manager role
+// Middleware for manager role check
 const requireManagerRole = (req, res, next) => {
 
     if (req.user && req.user.role === 'manager') {
@@ -40,17 +39,14 @@ const requireManagerRole = (req, res, next) => {
     }
 };
 
-// Middleware for user role
+// Middleware for user role check
 const requireUserRole = (req, res, next) => {
         console.log('auth data' , req.user);
         console.log('auth data role' , typeof(req.user.role));
-
         
     if ( req.user.role !== 'teamMember') {
         res.status(403).json({ message: 'Access denied. User role required.' });
     }
     next();
 };
-
-
 module.exports = { authenticateToken, requireManagerRole, requireUserRole };
